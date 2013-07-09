@@ -1,0 +1,8 @@
+#latest{
+	-webkit-transform: rotate(-20deg);
+	-webkit-box-shadow: 0 0 5px #000;
+	box-shadow: 0 0 5px #000;
+	border: 10px solid #FFF;
+	margin-top: 50px;
+	display: none;
+}

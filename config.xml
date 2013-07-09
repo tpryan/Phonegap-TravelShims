@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.phonegap.example"
+        versionCode="10" 
+        version   = "1.0.0">
+
+    <!-- versionCode is optional and Android only -->
+
+    <name>Travel Shims</name>
+
+    <description>
+        An example app built of little travel tools. 
+    </description>
+
+    <author href="http://terrenceryan.com" email="terry@terrenceryan.com">
+        Terry Ryan
+    </author>
+
+    <preference name="phonegap-version" value="2.9.0" />
+    <preference name="exit-on-suspend" value="true" />
+
+    <icon src="img/android/logo/36.png" gap:platform="android" gap:density="ldpi" />
+    <icon src="img/android/logo/48.png" gap:platform="android" gap:density="mdpi" />
+    <icon src="img/android/logo/72.png" gap:platform="android" gap:density="hdpi" />
+    <icon src="img/android/logo/96.png" gap:platform="android" gap:density="xhdpi" />
+    <icon src="img/ios/logo/57.png" width="57" height="57" />
+    <icon src="img/ios/logo/72.png" gap:platform="ios" width="72" height="72" />
+    <icon src="img/ios/logo/114.png" width="114" height="114" />
+    <icon src="img/bb/logo/icon.png" gap:platform="blackberry" />
+
+    <gap:splash src="img/ios/splash/splash-620x1136.png"  gap:platform="ios" width="640"  height="1136" /><!-- iPhone5 -->
+    <gap:splash src="img/ios/splash/splash-768x1004.png"  gap:platform="ios" width="768"  height="1004" /><!-- iPad Portrait -->
+    <gap:splash src="img/ios/splash/splash-1024x748.png"  gap:platform="ios" width="1024" height="748"  /><!-- iPad Landscape -->
+
+    <gap:splash src="img/android/splash/ldpi.png" gap:platform="android" gap:density="ldpi"  width="320" height="426" />
+    <gap:splash src="img/android/splash/mdpi.png" gap:platform="android" gap:density="mdpi"  width="320" height="470" />
+    <gap:splash src="img/android/splash/hdpi.png" gap:platform="android" gap:density="hdpi"  width="480" height="640" />
+    <gap:splash src="img/android/splash/xhdpi.png" gap:platform="android" gap:density="xhdpi" width="720" height="960" />
+
+    <feature name="http://api.phonegap.com/1.0/geolocation"/>
+    <feature name="http://api.phonegap.com/1.0/camera"/>
+    <feature name="http://api.phonegap.com/1.0/media"/>
+    <feature name="http://api.phonegap.com/1.0/file"/>
+    <plugin name="Camera" value="CDVCamera" />
+    <plugin name="Capture" value="CDVCapture" />
+</widget>

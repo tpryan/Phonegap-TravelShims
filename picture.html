@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <title>Travel Shims</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/responsive.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script src="js/travelapp.js"></script>
+
+    <script type="text/javascript">
+
+    var imageToSave;
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+        $("#picture-btn").click(getPicture);
+    }
+
+    function onError(error) {
+      // setTimeout(function() {
+      //   alert("An Error occured");
+      //   alert(error.code);
+      // }, 0);
+      console.log(error.message);
+    }
+
+    function getPicture(e){
+        e.preventDefault();
+        navigator.device.capture.captureImage(onGetImageSuccess, onError, { quality: 50, destinationType: destinationType.DATA_URL });
+    }
+
+    function onGetImageSuccess(imageInfo){
+      var imagePath = imageInfo[0].fullPath;
+      var result = document.getElementById("latest");
+      result.src = imagePath;
+      result.style.display="inline";
+    }
+
+
+    </script>
+
+  </head>
+  <body id="pagelist">
+
+    <div class="navbar navbar-fixed-top navbar-inverse">
+      <div class="navbar-inner">
+        <a class="brand" href="./index.html">Travel Shims</a>
+        <a class="btn pull-right" href="settings.html">
+          <i class="icon-cog"></i> 
+          <span class="listtext">Settings</span>
+        </a>
+        <a class="btn pull-right" href="about.html">
+          <i class="icon-info-sign"></i> 
+          <span class="listtext">About</span>
+        </a>
+      </div>
+    </div>
+
+    <ul class="breadcrumb">
+      <li><a href="index.html">Main</a> <span class="divider">/</span></li>
+      <li class="active">What's the audience look like?</li>
+    </ul>
+    <div class="container">
+      <button id="picture-btn" class="btn btn-primary btn-large" type="submit" class="btn">Snap a picture</button>
+      <img id="latest" src="" />
+    </div>
+  </body>
+ 
+  <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

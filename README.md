@@ -1,0 +1,1 @@
+This is a travel app that shows a few examples of building an application with PhoneGap Build and Brackets. I hope to expand it over time, but it is just a set of Geolocation tools.

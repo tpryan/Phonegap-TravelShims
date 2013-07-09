@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <title>Travel Shims</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/responsive.css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/travelapp.js"></script>
+
+    <script type="text/javascript">
+    
+    $(document).ready(function(){
+      var location = getHomeLocation();
+      reportHomeLocation(location.lat,location.lon);
+      $("#saveaddress").click(computeHomeLocation);
+      $("#savethisaddress").click(setHomeLocationHere);
+
+    });
+
+
+    function computeHomeLocation(e) {
+      e.preventDefault();
+
+      var address = $('#address').val() + ' ' + $('#city').val() + ' ' + $('#state').val() + ' ' + $('#zip').val();
+
+      $.ajax({
+          url: "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + address,
+          success: doLookupSuccess
+        });
+
+
+    }
+    function setHomeLocationHere(e) {
+      e.preventDefault();
+      navigator.geolocation.getCurrentPosition(getLocationSuccess,getLocationError); 
+    }
+    
+    function getLocationSuccess(position) {
+      console.log("getLocationSuccess Fired");
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+
+      setHomeLocation(lat,lon);
+      reportHomeLocation(lat,lon);
+    }
+
+    function getLocationError(error) {
+      console.log("getLocationError Fired");
+      console.log(error);
+    }
+
+
+    function doLookupSuccess(e) {
+        console.log(e.results[0].geometry.location);
+        var lat = e.results[0].geometry.location.lat;
+        var lon = e.results[0].geometry.location.lng;
+        setHomeLocation(lat,lon);
+        reportHomeLocation(lat,lon);
+    }
+
+    function setHomeLocation(lat,lon) {
+        localStorage.setItem('lat', lat);
+        localStorage.setItem('lon', lon);
+        
+    }
+    function reportHomeLocation(lat,lon) {
+        $('#lat').html(lat);
+        $('#lon').html(lon);
+    }
+
+    </script>
+
+  </head>
+  <body id="pagelist">
+
+    <div class="navbar navbar-fixed-top navbar-inverse">
+      <div class="navbar-inner">
+        <a class="brand" href="./index.html">Travel Shims</a>
+        <a class="btn pull-right" href="about.html">
+          <i class="icon-info-sign"></i> 
+          <span class="listtext">About</span>
+        </a>
+      </div>
+    </div>
+
+    <ul class="breadcrumb">
+      <li><a href="index.html">Main</a> <span class="divider">/</span></li>
+      <li class="active">Settings</li>
+    </ul>
+    <p>
+        <span class="label label-info" style="width:40px; display:inline-block; margin-right:10px">Lat</span>
+        <span id="lat" style="width:85px; display:inline-block; text-align:right"></span>
+    </p> 
+    <p>
+        <span class="label label-info" style="width:40px; display:inline-block; margin-right:10px">Lon</span>
+        <span id="lon" style="width:85px; display:inline-block; text-align:right"></span>
+    </p>
+
+
+    <form>
+      <legend>Home Address</legend>
+      <input name="address" id="address" type="text" placeholder="Address" class="input-xlarge">
+      <input name="city" id="city" type="text" placeholder="City" class="input-xlarge">
+      <input name="state" id="state" type="text" placeholder="State" class="input-xlarge">
+      <input name="zip" id="zip" type="text" placeholder="Zip Code" class="input-xlarge">
+      <br />
+      <button id="saveaddress" class="btn btn-primary btn-large" type="submit" class="btn">Save</button>
+      <button id="savethisaddress" class="btn btn-primary btn-large" type="submit" class="btn">I am Home</button>
+    </form>
+
+  </body>
+ 
+  <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
