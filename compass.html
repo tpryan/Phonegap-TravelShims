@@ -12,6 +12,11 @@
 
     <script type="text/javascript">
 
+    var lastReading = 0;
+
+    // The watch id references the current `watchHeading`
+    var watchID = null;
+
     document.addEventListener("deviceready", onDeviceReady, false);
 
     function onDeviceReady() {
@@ -26,8 +31,8 @@
     //
     function startWatch() {
 
-        // Update compass every 3 seconds
-        var options = { frequency: 100 };
+      // Update compass every 3 seconds
+      var options = { frequency: 100 };
 
       watchID = navigator.compass.watchHeading(onSuccess, onError, options);
     }
@@ -45,7 +50,6 @@
     //
     function onSuccess(heading) {
         var element = document.getElementById('heading');
-        element.innerHTML = 'Heading: ' + heading.magneticHeading;
         rotateCompass(heading.magneticHeading);
     }
 
@@ -56,7 +60,6 @@
     }
 
     function rotateCompass(heading){
-        console.log("lastReading: " + lastReading);
         var numberToTravelTo = heading;
         var delta = Math.abs(lastReading - heading);
         console.log("numberToTravelTo: " + numberToTravelTo);
@@ -65,14 +68,11 @@
         if (delta > 2){
             if (delta > 180){
                 numberToTravelTo = numberToTravelTo - 360;
-                 // console.log("new numberToTravelTo: " + numberToTravelTo);
             }
         
             var compass =  document.querySelector('#compass');
             compass.style.webkitTransform = "rotate(" + flipSign(numberToTravelTo) + "deg)";
             lastReading = numberToTravelTo;
-            // var dir = document.getElementById('direction');
-            // dir.innerHTML = flipSign(numberToTravelTo);
 
         }
 

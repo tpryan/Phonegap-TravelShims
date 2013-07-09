@@ -25,7 +25,7 @@
 }
 
 #compass{
-    -webkit-transition: -webkit-transform .3s ease-in; /* easeInOutQuad */
+    -webkit-transition: -webkit-transform .1s linear; /* easeInOutQuad */
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
 }
