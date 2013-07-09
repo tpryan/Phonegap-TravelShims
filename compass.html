@@ -1,0 +1,130 @@
+<html>
+  <head>
+    <title>Travel Shims</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/responsive.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script src="js/travelapp.js"></script>
+
+    <script type="text/javascript">
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        startWatch()
+    }
+
+    function onError(error) {
+      console.log(error.message);
+    }
+
+    // Start watching the compass
+    //
+    function startWatch() {
+
+        // Update compass every 3 seconds
+        var options = { frequency: 100 };
+
+      watchID = navigator.compass.watchHeading(onSuccess, onError, options);
+    }
+
+    // Stop watching the compass
+    //
+    function stopWatch() {
+        if (watchID) {
+            navigator.compass.clearWatch(watchID);
+            watchID = null;
+        }
+    }
+
+    // onSuccess: Get the current heading
+    //
+    function onSuccess(heading) {
+        var element = document.getElementById('heading');
+        element.innerHTML = 'Heading: ' + heading.magneticHeading;
+        rotateCompass(heading.magneticHeading);
+    }
+
+    // onError: Failed to get the heading
+    //
+    function onError(compassError) {
+        alert('Compass error: ' + compassError.code);
+    }
+
+    function rotateCompass(heading){
+        console.log("lastReading: " + lastReading);
+        var numberToTravelTo = heading;
+        var delta = Math.abs(lastReading - heading);
+        console.log("numberToTravelTo: " + numberToTravelTo);
+        console.log("delta: " + delta);
+
+        if (delta > 2){
+            if (delta > 180){
+                numberToTravelTo = numberToTravelTo - 360;
+                 // console.log("new numberToTravelTo: " + numberToTravelTo);
+            }
+        
+            var compass =  document.querySelector('#compass');
+            compass.style.webkitTransform = "rotate(" + flipSign(numberToTravelTo) + "deg)";
+            lastReading = numberToTravelTo;
+            // var dir = document.getElementById('direction');
+            // dir.innerHTML = flipSign(numberToTravelTo);
+
+        }
+
+        
+    }
+
+    function flipSign(number){
+        return number * -1;
+    }
+
+
+
+    </script>
+
+  </head>
+  <body id="pagelist">
+
+    <div class="navbar navbar-fixed-top navbar-inverse">
+      <div class="navbar-inner">
+        <a class="brand" href="./index.html">Travel Shims</a>
+        <a class="btn pull-right" href="settings.html">
+          <i class="icon-cog"></i> 
+          <span class="listtext">Settings</span>
+        </a>
+        <a class="btn pull-right" href="about.html">
+          <i class="icon-info-sign"></i> 
+          <span class="listtext">About</span>
+        </a>
+      </div>
+    </div>
+
+    <ul class="breadcrumb">
+      <li><a href="index.html">Main</a> <span class="divider">/</span></li>
+      <li class="active">Which way am I facing?</li>
+    </ul>
+    <div class="container">
+      <div id="compassholder">
+        <div id="pointer">&darr;</div>
+        <ul id="compass">
+            <li id="N">N</li>
+            <li id="NE">NE</li>
+            <li id="E">E</li>
+            <li id="SE">SE</li>
+            <li id="S">S</li>
+            <li id="SW">SW</li>
+            <li id="W">W</li>
+            <li id="NW">NW</li>
+        </ul>
+      </div>  
+    </div>
+  </body>
+ 
+  <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
