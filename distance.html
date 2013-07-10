@@ -14,45 +14,14 @@
     document.addEventListener("deviceready", onDeviceReady, false);
 
     function onDeviceReady() {
-        var location = getHomeLocation();
-        console.log("Location:", location);
-        $('#lat-home').html(location.lat);
-        $('#lon-home').html(location.lon);
-        getLocation();
+        var home = homeLocation.get();
+        console.log("Home:", home);
+        $('#lat-home').html(home.lat);
+        $('#lon-home').html(home.lon);
+        distanceModule.getLocation();
     }
 
 
-    function getLocation() {
-      navigator.geolocation.getCurrentPosition(getLocationSuccess,getLocationError); 
-      console.log("getLocation Fired");
-    }
-
-    function getLocationError(error) {
-      console.log("getLocationError Fired");
-      console.log(error);
-    }
-
-    function getLocationSuccess(position) {
-      var lat_device = position.coords.latitude;
-      var lon_device = position.coords.longitude;
-      var lat_home = $("#lat-home").html();
-      var lon_home = $("#lon-home").html()
-
-      $("#lat-device").html(lat_device);
-      $("#lon-device").html(lon_device);
-
-      console.log("lat_device:",lat_device);
-      console.log("lon_device:",lon_device);
-      console.log("lat_home:",lat_home);
-      console.log("lon_home:",lon_home);
-
-      var distanceKM = calcDistanceBetween(lat_device, lon_device,lat_home, lon_home);
-      $("#d_km").html(Math.round(distanceKM));
-
-      var distanceMiles = calcDistanceBetween(lat_device, lon_device,lat_home, lon_home, "miles");
-      $("#d_miles").html(Math.round(distanceMiles));
-
-    }
 
 
 

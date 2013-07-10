@@ -14,44 +14,10 @@
 
     function onDeviceReady() {
         console.log("onDeviceReady Fired");
-        getLocation();
+        locationPage.getLocation();
         
     }
 
-    function getLocation() {
-      console.log("getLocation Fired");
-      navigator.geolocation.getCurrentPosition(getLocationSuccess,getLocationError); 
-      
-    }
-
-    function getLocationSuccess(position) {
-      console.log("getLocationSuccess Fired");
-      $("#lat").html(position.coords.latitude);
-      $("#lon").html(position.coords.longitude);
-      doReverseLookup(position);
-    }
-
-    function getLocationError(error) {
-      console.log("getLocationError Fired");
-      console.log(error);
-    }
-
-    function doReverseLookup(position) {
-      console.log("doReverseLookup Fired");
-      var latlon = position.coords.latitude + "," + position.coords.longitude;
-
-      $.ajax({
-          url: "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&latlng=" + latlon,
-          success: doReverseLookupSuccess
-        });
-    }
-
-    function doReverseLookupSuccess(response) {
-      console.log("doReverseLookupSuccess Fired");
-      console.log(response);
-      var addressObj = response.results[0];
-      $("#address").html(addressObj.formatted_address);
-    }
 
     </script>
 
