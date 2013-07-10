@@ -12,36 +12,12 @@
 
     <script type="text/javascript">
 
-    var imageToSave;
-    var pictureSource;   // picture source
-    var destinationType; // sets the format of returned value
     document.addEventListener("deviceready", onDeviceReady, false);
 
     function onDeviceReady() {
-        pictureSource=navigator.camera.PictureSourceType;
-        destinationType=navigator.camera.DestinationType;
-        $("#picture-btn").click(getPicture);
+        $("#picture-btn").click(picture.getPicture);
     }
 
-    function onError(error) {
-      // setTimeout(function() {
-      //   alert("An Error occured");
-      //   alert(error.code);
-      // }, 0);
-      console.log(error.message);
-    }
-
-    function getPicture(e){
-        e.preventDefault();
-        navigator.device.capture.captureImage(onGetImageSuccess, onError, { quality: 50, destinationType: destinationType.DATA_URL });
-    }
-
-    function onGetImageSuccess(imageInfo){
-      var imagePath = imageInfo[0].fullPath;
-      var result = document.getElementById("latest");
-      result.src = imagePath;
-      result.style.display="inline";
-    }
 
 
     </script>

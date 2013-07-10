@@ -12,63 +12,15 @@
     <script type="text/javascript">
     
     $(document).ready(function(){
-      var location = getHomeLocation();
-      reportHomeLocation(location.lat,location.lon);
-      $("#saveaddress").click(computeHomeLocation);
-      $("#savethisaddress").click(setHomeLocationHere);
+      var location = homeLocation.get();
+      settingsPage.reportHomeLocation(location.lat,location.lon);
+      $("#saveaddress").click(settings.computeHomeLocation);
+      $("#savethisaddress").click(settings.setHomeLocationHere);
 
     });
 
 
-    function computeHomeLocation(e) {
-      e.preventDefault();
 
-      var address = $('#address').val() + ' ' + $('#city').val() + ' ' + $('#state').val() + ' ' + $('#zip').val();
-
-      $.ajax({
-          url: "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + address,
-          success: doLookupSuccess
-        });
-
-
-    }
-    function setHomeLocationHere(e) {
-      e.preventDefault();
-      navigator.geolocation.getCurrentPosition(getLocationSuccess,getLocationError); 
-    }
-    
-    function getLocationSuccess(position) {
-      console.log("getLocationSuccess Fired");
-      var lat = position.coords.latitude;
-      var lon = position.coords.longitude;
-
-      setHomeLocation(lat,lon);
-      reportHomeLocation(lat,lon);
-    }
-
-    function getLocationError(error) {
-      console.log("getLocationError Fired");
-      console.log(error);
-    }
-
-
-    function doLookupSuccess(e) {
-        console.log(e.results[0].geometry.location);
-        var lat = e.results[0].geometry.location.lat;
-        var lon = e.results[0].geometry.location.lng;
-        setHomeLocation(lat,lon);
-        reportHomeLocation(lat,lon);
-    }
-
-    function setHomeLocation(lat,lon) {
-        localStorage.setItem('lat', lat);
-        localStorage.setItem('lon', lon);
-        
-    }
-    function reportHomeLocation(lat,lon) {
-        $('#lat').html(lat);
-        $('#lon').html(lon);
-    }
 
     </script>
 

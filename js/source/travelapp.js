@@ -134,4 +134,102 @@ var distanceModule = {
 	
 };
 
+function Address(street,city,state,zip) {
+	this.street = street;
+	this.city = city;
+	this.state = state;
+	this.zip = zip;
+
+	
+	function getFormatted() {
+		return this.street + ' ' + this.city + ' ' + this.state + ' ' + this.zip;
+	}
+	this.getFormatted = getFormatted;
+}
+
+var settingsPage = {
+	reportHomeLocation: function(lat,lon) {
+        $('#lat').html(lat);
+        $('#lon').html(lon);
+    },
+
+    getAddress: function() {
+		var formInput = new Address();
+		formInput.street =  $('#address').val();
+		formInput.city =  $('#city').val();
+		formInput.state =  $('#state').val();
+		formInput.zip =  $('#zip').val();
+		return formInput;
+    }
+
+};
+
+var settings = {
+	computeHomeLocation: function(e) {
+		e.preventDefault();
+
+		var address = settingsPage.getAddress();
+
+		$.ajax({
+			url: "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + address.getFormatted(),
+			success: settings.doLookupSuccess
+		});
+	},
+
+	setHomeLocationHere: function (e) {
+		e.preventDefault();
+		navigator.geolocation.getCurrentPosition(settings.getLocationSuccess,settings.getLocationError);
+	},
+
+	getLocationSuccess: function(position) {
+		console.log("getLocationSuccess Fired");
+		var lat = position.coords.latitude;
+		var lon = position.coords.longitude;
+
+		homeLocation.set(lat,lon);
+		settingsPage.reportHomeLocation(lat,lon);
+	},
+
+	getLocationError: function(error) {
+		console.log("getLocationError Fired");
+		console.log(error);
+	},
+
+
+	doLookupSuccess: function(e) {
+		console.log(e.results[0].geometry.location);
+		var lat = e.results[0].geometry.location.lat;
+		var lon = e.results[0].geometry.location.lng;
+		homeLocation.set(lat,lon);
+		settingsPage.reportHomeLocation(lat,lon);
+	}
+};
+
+var picturePage = {
+	displayImage: function(imagePath){
+      var result = document.getElementById("latest");
+      result.src = imagePath;
+      result.style.display="inline";
+	}
+};
+
+var picture = {
+
+
+	onError: function(error) {
+		console.log(error.message);
+	},
+
+	getPicture: function(e){
+		e.preventDefault();
+		navigator.device.capture.captureImage(picture.onGetImageSuccess, picture.onError, {limit: 1});
+	},
+
+	onGetImageSuccess: function(imageInfo){
+		var imagePath = imageInfo[0].fullPath;
+		picturePage.displayImage(imagePath);
+	}
+
+};
+
 
