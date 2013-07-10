@@ -232,4 +232,65 @@ var picture = {
 
 };
 
+var compassInterface = {
+
+	rotateCompass: function(numberToTravelTo){
+		var compass =  document.querySelector('#compass');
+        compass.style.webkitTransform = "rotate(" + numberToTravelTo + "deg)";
+	}
+
+
+};
+
+var compass = {
+
+	lastReading: 0,
+
+    watchID: null,
+
+	onError: function(error) {
+      console.log(error.message);
+    },
+
+    startWatch: function() {
+		var options = { frequency: 100 };
+		compass.watchID = navigator.compass.watchHeading(compass.onSuccess, compass.onError, options);
+    },
+
+    stopWatch: function() {
+        if (compass.watchID) {
+            navigator.compass.clearWatch(compass.watchID);
+            compass.watchID = null;
+        }
+    },
+
+    onSuccess: function(heading) {
+        var element = document.getElementById('heading');
+        compass.changeHeading(heading.magneticHeading);
+    },
+
+
+    changeHeading: function(heading){
+        var numberToTravelTo = heading;
+        var delta = Math.abs(compass.lastReading - heading);
+        console.log("numberToTravelTo: " + numberToTravelTo);
+        console.log("delta: " + delta);
+
+        if (delta > 2){
+            if (delta > 180){
+                numberToTravelTo = numberToTravelTo - 360;
+            }
+        
+            compassInterface.rotateCompass(compass.flipSign(numberToTravelTo));
+            compass.lastReading = numberToTravelTo;
+
+        }
+    },
+
+    flipSign: function(number){
+        return number * -1;
+    }
+
+};
+
 
