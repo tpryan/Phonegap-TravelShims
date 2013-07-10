@@ -6,21 +6,19 @@
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="css/responsive.css" rel="stylesheet">
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
-    <script src="js/jquery-1.8.2.min.js"></script>
     <script src="js/travelapp.js"></script>
 
     <script type="text/javascript">
-    
-    $(document).ready(function(){
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
       var location = homeLocation.get();
       settingsInterface.reportHomeLocation(location.lat,location.lon);
-      $("#saveaddress").click(settings.computeHomeLocation);
-      $("#savethisaddress").click(settings.setHomeLocationHere);
-
-    });
-
-
-
+      document.querySelector("#saveaddress").addEventListener("click",settings.computeHomeLocation);
+      document.querySelector("#savethisaddress").addEventListener("click",settings.setHomeLocationHere);
+        
+    }
 
     </script>
 

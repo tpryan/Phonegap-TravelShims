@@ -1,4 +1,4 @@
-
+var googleMapsURL = "https://maps.googleapis.com/maps/api/geocode/json";
 var homeLocation = {
 
 	get: function() {
@@ -15,11 +15,40 @@ var homeLocation = {
 
 };
 
+function Address(street,city,state,zip) {
+	this.street = street;
+	this.city = city;
+	this.state = state;
+	this.zip = zip;
 
-function toRad(Value) {
-	/** Converts numeric degrees to radians */
-	return Value * Math.PI / 180;
+	
+	function getFormatted() {
+		return this.street + ' ' + this.city + ' ' + this.state + ' ' + this.zip;
+	}
+	this.getFormatted = getFormatted;
 }
+
+
+var ajax = {
+	xmlhttp: new XMLHttpRequest(),
+	callback: "",
+
+	
+	onReadyChangeState: function(){
+		console.log("ajax.onReadyChangeState fired");
+		if (ajax.xmlhttp.readyState === 4 && ajax.xmlhttp.status === 200){
+			ajax.callback(JSON.parse(ajax.xmlhttp.responseText));
+		}
+	},
+	get: function(url, successCallback){
+		console.log("ajax.get fired");
+		ajax.callback = successCallback;
+		ajax.xmlhttp.onreadystatechange = ajax.onReadyChangeState;
+		ajax.xmlhttp.open("GET",url,true);
+		ajax.xmlhttp.send();
+		ajax.xmlhttp.setRequestHeader();
+	}
+};
 
 
 
@@ -32,8 +61,9 @@ var locationInterface = {
 
 	getLocationSuccess: function(position){
 		console.log("locationInterface.getLocationSuccess Fired");
-		$("#lat").html(position.coords.latitude);
-		$("#lon").html(position.coords.longitude);
+		document.querySelector("#lat").innerHTML = position.coords.latitude;
+		document.querySelector("#lon").innerHTML = position.coords.longitude;
+
 		console.log(this);
 		locationInterface.doReverseLookup(position);
     },
@@ -47,34 +77,66 @@ var locationInterface = {
       console.log("locationInterface.doReverseLookup Fired");
       var latlon = position.coords.latitude + "," + position.coords.longitude;
 
-      $.ajax({
-          url: "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&latlng=" + latlon,
-          success: locationInterface.doReverseLookupSuccess
-        });
+      ajax.get(googleMapsURL + "?sensor=false&latlng=" + latlon, locationInterface.doReverseLookupSuccess);
     },
 
     doReverseLookupSuccess: function(response) {
       console.log("locationInterface.doReverseLookupSuccess Fired");
-      console.log(response);
       var addressObj = response.results[0];
-      $("#address").html(addressObj.formatted_address);
+      document.querySelector("#address").innerHTML = addressObj.formatted_address;
     }
 
 
 };
 
+
+
 var distanceInterface = {
 	setDistanceReadout: function(d_km, d_miles){
-		$("#d_km").html(d_km);
-		$("#d_miles").html(d_miles);
+		document.querySelector("#d_km").innerHTML = d_km;
+		document.querySelector("#d_miles").innerHTML = d_miles;
 	},
 
 	setDevicePosition: function (lat,lon) {
-		$("#lat-device").html(lat);
-		$("#lon-device").html(lon);
+		document.querySelector("#lat-device").innerHTML = lat;
+		document.querySelector("#lon-device").innerHTML = lon;
 	}
 
 };
+
+var settingsInterface = {
+	reportHomeLocation: function(lat,lon) {
+		document.querySelector("#lat").innerHTML = lat;
+		document.querySelector("#lon").innerHTML = lon;
+    },
+
+    getAddress: function() {
+		var formInput = new Address();
+		formInput.street =  document.querySelector("#address").value;
+		formInput.city =  document.querySelector("#city").value;
+		formInput.state =  document.querySelector("#state").value;
+		formInput.zip =  document.querySelector("#zip").value;
+		return formInput;
+    }
+
+};
+
+var pictureInterface = {
+	displayImage: function(imagePath){
+      var result = document.getElementById("latest");
+      result.src = imagePath;
+      result.style.display="inline";
+	}
+};
+
+var compassInterface = {
+
+	rotateCompass: function(numberToTravelTo){
+		var compass =  document.querySelector('#compass');
+        compass.style.webkitTransform = "rotate(" + numberToTravelTo + "deg)";
+	}
+};
+
 
 
 var distanceModule = {
@@ -109,6 +171,11 @@ var distanceModule = {
       distanceInterface.setDistanceReadout(distanceKM, distanceMiles);
     },
 
+    toRad: function (Value) {
+		/** Converts numeric degrees to radians */
+		return Value * Math.PI / 180;
+	},
+
     calcDistanceBetween: function(lat1, lon1, lat2, lon2, units) {
 		if (typeof(units) === "undefined") {
 			units = "km";
@@ -121,10 +188,10 @@ var distanceModule = {
 
 		//Radius of the earth in:  3958.7558657440545 miles,  6371 km  | var R = (6371 / 1.609344);
 
-		var dLat = toRad(lat2-lat1);
-		var dLon = toRad(lon2-lon1);
+		var dLat = distanceModule.toRad(lat2-lat1);
+		var dLon = distanceModule.toRad(lon2-lon1);
 		var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-			Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+			Math.cos(distanceModule.toRad(lat1)) * Math.cos(distanceModule.toRad(lat2)) *
 			Math.sin(dLon/2) * Math.sin(dLon/2);
 		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 		var d = R * c;
@@ -134,35 +201,10 @@ var distanceModule = {
 	
 };
 
-function Address(street,city,state,zip) {
-	this.street = street;
-	this.city = city;
-	this.state = state;
-	this.zip = zip;
 
-	
-	function getFormatted() {
-		return this.street + ' ' + this.city + ' ' + this.state + ' ' + this.zip;
-	}
-	this.getFormatted = getFormatted;
-}
 
-var settingsInterface = {
-	reportHomeLocation: function(lat,lon) {
-        $('#lat').html(lat);
-        $('#lon').html(lon);
-    },
 
-    getAddress: function() {
-		var formInput = new Address();
-		formInput.street =  $('#address').val();
-		formInput.city =  $('#city').val();
-		formInput.state =  $('#state').val();
-		formInput.zip =  $('#zip').val();
-		return formInput;
-    }
 
-};
 
 var settings = {
 	computeHomeLocation: function(e) {
@@ -170,10 +212,7 @@ var settings = {
 
 		var address = settingsInterface.getAddress();
 
-		$.ajax({
-			url: "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + address.getFormatted(),
-			success: settings.doLookupSuccess
-		});
+		ajax.get(googleMapsURL + "?sensor=false&address=" + address.getFormatted(), settings.doLookupSuccess);
 	},
 
 	setHomeLocationHere: function (e) {
@@ -205,13 +244,7 @@ var settings = {
 	}
 };
 
-var pictureInterface = {
-	displayImage: function(imagePath){
-      var result = document.getElementById("latest");
-      result.src = imagePath;
-      result.style.display="inline";
-	}
-};
+
 
 var picture = {
 
@@ -232,15 +265,7 @@ var picture = {
 
 };
 
-var compassInterface = {
 
-	rotateCompass: function(numberToTravelTo){
-		var compass =  document.querySelector('#compass');
-        compass.style.webkitTransform = "rotate(" + numberToTravelTo + "deg)";
-	}
-
-
-};
 
 var compass = {
 

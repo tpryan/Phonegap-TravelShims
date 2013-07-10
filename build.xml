@@ -90,7 +90,11 @@
 				<exclude name='.git/**'/>
 				<exclude name='build.xml'/>
 				<exclude name='build.properties'/>
+				<exclude name='build.number'/>
 				<exclude name='README.md'/>
+				<exclude name='js/source/**'/>
+				<exclude name='css/source/**'/>
+				<exclude name='**/scripts/**'/>
 			</fileset>	
 		</copy>
 	</target>
@@ -106,6 +110,7 @@
 				<exclude name='README.md'/>
 				<exclude name='config.xml'/>
 				<exclude name='beep.wav'/>
+				<exclude name='js/source/**'/>
 				<exclude name='**/splash/**'/>
 				<exclude name='**/scripts/**'/>
 				<exclude name='LICENSE'/>

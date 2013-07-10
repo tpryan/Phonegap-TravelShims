@@ -44,4 +44,5 @@
     <feature name="http://api.phonegap.com/1.0/file"/>
     <plugin name="Camera" value="CDVCamera" />
     <plugin name="Capture" value="CDVCapture" />
+    <access origin="https://maps.googleapis.com" />
 </widget>

@@ -6,7 +6,6 @@
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="css/responsive.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
-    <script src="js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
     <script src="js/travelapp.js"></script>
 
@@ -15,7 +14,7 @@
     document.addEventListener("deviceready", onDeviceReady, false);
 
     function onDeviceReady() {
-        $("#picture-btn").click(picture.getPicture);
+        document.querySelector("#picture-btn").addEventListener("click",picture.getPicture);
     }
 
 

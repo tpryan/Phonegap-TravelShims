@@ -5,7 +5,6 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="css/responsive.css" rel="stylesheet">
-    <script src="js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
     <script src="js/travelapp.js"></script>
 
@@ -16,8 +15,8 @@
     function onDeviceReady() {
         var home = homeLocation.get();
         console.log("Home:", home);
-        $('#lat-home').html(home.lat);
-        $('#lon-home').html(home.lon);
+        document.querySelector("#lat-home").innerHTML = home.lat;
+        document.querySelector("#lon-home").innerHTML = home.lon;
         distanceModule.getLocation();
     }
 
