@@ -13,7 +13,7 @@
     
     $(document).ready(function(){
       var location = homeLocation.get();
-      settingsPage.reportHomeLocation(location.lat,location.lon);
+      settingsInterface.reportHomeLocation(location.lat,location.lon);
       $("#saveaddress").click(settings.computeHomeLocation);
       $("#savethisaddress").click(settings.setHomeLocationHere);
 

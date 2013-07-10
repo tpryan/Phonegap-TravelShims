@@ -23,19 +23,19 @@ function toRad(Value) {
 
 
 
-var locationPage = {
+var locationInterface = {
 
 	getLocation: function(){
-		console.log("locationPage.getLocation Fired");
+		console.log("locationInterface.getLocation Fired");
 		navigator.geolocation.getCurrentPosition(this.getLocationSuccess,this.getError);
 	},
 
 	getLocationSuccess: function(position){
-		console.log("locationPage.getLocationSuccess Fired");
+		console.log("locationInterface.getLocationSuccess Fired");
 		$("#lat").html(position.coords.latitude);
 		$("#lon").html(position.coords.longitude);
 		console.log(this);
-		locationPage.doReverseLookup(position);
+		locationInterface.doReverseLookup(position);
     },
 
     getError: function(error){
@@ -44,17 +44,17 @@ var locationPage = {
     },
 
     doReverseLookup: function(position) {
-      console.log("locationPage.doReverseLookup Fired");
+      console.log("locationInterface.doReverseLookup Fired");
       var latlon = position.coords.latitude + "," + position.coords.longitude;
 
       $.ajax({
           url: "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&latlng=" + latlon,
-          success: locationPage.doReverseLookupSuccess
+          success: locationInterface.doReverseLookupSuccess
         });
     },
 
     doReverseLookupSuccess: function(response) {
-      console.log("locationPage.doReverseLookupSuccess Fired");
+      console.log("locationInterface.doReverseLookupSuccess Fired");
       console.log(response);
       var addressObj = response.results[0];
       $("#address").html(addressObj.formatted_address);
@@ -63,7 +63,7 @@ var locationPage = {
 
 };
 
-var distancePage = {
+var distanceInterface = {
 	setDistanceReadout: function(d_km, d_miles){
 		$("#d_km").html(d_km);
 		$("#d_miles").html(d_miles);
@@ -96,7 +96,7 @@ var distanceModule = {
       var lat_home = home.lat;
       var lon_home = home.lon;
 
-      distancePage.setDevicePosition(lat_device, lon_device);
+      distanceInterface.setDevicePosition(lat_device, lon_device);
 
       console.log("lat_device:",lat_device);
       console.log("lon_device:",lon_device);
@@ -106,7 +106,7 @@ var distanceModule = {
       var distanceKM = Math.round(distanceModule.calcDistanceBetween(lat_device, lon_device,lat_home, lon_home));
       var distanceMiles = Math.round(distanceModule.calcDistanceBetween(lat_device, lon_device,lat_home, lon_home, "miles"));
       
-      distancePage.setDistanceReadout(distanceKM, distanceMiles);
+      distanceInterface.setDistanceReadout(distanceKM, distanceMiles);
     },
 
     calcDistanceBetween: function(lat1, lon1, lat2, lon2, units) {
@@ -147,7 +147,7 @@ function Address(street,city,state,zip) {
 	this.getFormatted = getFormatted;
 }
 
-var settingsPage = {
+var settingsInterface = {
 	reportHomeLocation: function(lat,lon) {
         $('#lat').html(lat);
         $('#lon').html(lon);
@@ -168,7 +168,7 @@ var settings = {
 	computeHomeLocation: function(e) {
 		e.preventDefault();
 
-		var address = settingsPage.getAddress();
+		var address = settingsInterface.getAddress();
 
 		$.ajax({
 			url: "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + address.getFormatted(),
@@ -187,7 +187,7 @@ var settings = {
 		var lon = position.coords.longitude;
 
 		homeLocation.set(lat,lon);
-		settingsPage.reportHomeLocation(lat,lon);
+		settingsInterface.reportHomeLocation(lat,lon);
 	},
 
 	getLocationError: function(error) {
@@ -201,11 +201,11 @@ var settings = {
 		var lat = e.results[0].geometry.location.lat;
 		var lon = e.results[0].geometry.location.lng;
 		homeLocation.set(lat,lon);
-		settingsPage.reportHomeLocation(lat,lon);
+		settingsInterface.reportHomeLocation(lat,lon);
 	}
 };
 
-var picturePage = {
+var pictureInterface = {
 	displayImage: function(imagePath){
       var result = document.getElementById("latest");
       result.src = imagePath;
@@ -227,7 +227,7 @@ var picture = {
 
 	onGetImageSuccess: function(imageInfo){
 		var imagePath = imageInfo[0].fullPath;
-		picturePage.displayImage(imagePath);
+		pictureInterface.displayImage(imagePath);
 	}
 
 };
