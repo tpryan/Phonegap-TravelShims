@@ -1,7 +1,7 @@
 var googleMapsURL = "https://maps.googleapis.com/maps/api/geocode/json";
 var homeLocation = {
 
-	get: function() {
+	get: function () {
 		var results = {};
 		results.lat = localStorage.getItem('lat');
 		results.lon = localStorage.getItem('lon');
@@ -12,7 +12,6 @@ var homeLocation = {
         localStorage.setItem('lon', lon);
     }
 
-
 };
 
 function Address(street,city,state,zip) {
@@ -20,7 +19,6 @@ function Address(street,city,state,zip) {
 	this.city = city;
 	this.state = state;
 	this.zip = zip;
-
 	
 	function getFormatted() {
 		return this.street + ' ' + this.city + ' ' + this.state + ' ' + this.zip;
@@ -28,12 +26,9 @@ function Address(street,city,state,zip) {
 	this.getFormatted = getFormatted;
 }
 
-
 var ajax = {
 	xmlhttp: new XMLHttpRequest(),
 	callback: "",
-
-	
 	onReadyChangeState: function(){
 		console.log("ajax.onReadyChangeState fired");
 		if (ajax.xmlhttp.readyState === 4 && ajax.xmlhttp.status === 200){
@@ -63,7 +58,6 @@ var locationInterface = {
 		console.log("locationInterface.getLocationSuccess Fired");
 		document.querySelector("#lat").innerHTML = position.coords.latitude;
 		document.querySelector("#lon").innerHTML = position.coords.longitude;
-
 		console.log(this);
 		locationInterface.doReverseLookup(position);
     },
@@ -85,10 +79,7 @@ var locationInterface = {
       var addressObj = response.results[0];
       document.querySelector("#address").innerHTML = addressObj.formatted_address;
     }
-
-
 };
-
 
 
 var distanceInterface = {
@@ -248,7 +239,6 @@ var settings = {
 
 var picture = {
 
-
 	onError: function(error) {
 		console.log(error.message);
 	},
@@ -270,7 +260,6 @@ var picture = {
 var compass = {
 
 	lastReading: 0,
-
     watchID: null,
 
 	onError: function(error) {
@@ -294,7 +283,6 @@ var compass = {
         compass.changeHeading(heading.magneticHeading);
     },
 
-
     changeHeading: function(heading){
         var numberToTravelTo = heading;
         var delta = Math.abs(compass.lastReading - heading);
@@ -308,7 +296,6 @@ var compass = {
         
             compassInterface.rotateCompass(compass.flipSign(numberToTravelTo));
             compass.lastReading = numberToTravelTo;
-
         }
     },
 
