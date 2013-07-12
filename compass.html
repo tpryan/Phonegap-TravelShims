@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Travel Shims</title>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -10,51 +10,49 @@
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
     <script src="js/travelapp.js"></script>
     <script type="text/javascript">
-
-    document.addEventListener("deviceready", onDeviceReady, false);
-
-    function onDeviceReady() {
-        compass.startWatch()
-    }
-
+        document.addEventListener("deviceready", onDeviceReady, false);
+        
+        function onDeviceReady() {
+            compass.startWatch()
+        }
     </script>
 
-  </head>
-  <body id="pagelist">
+</head>
+<body id="pagelist">
 
     <div class="navbar navbar-fixed-top navbar-inverse">
-      <div class="navbar-inner">
-        <a class="btn pull-left" href="index.html">
-          <i class="icon-arrow-left"></i> 
-          <span class="listtext">Main</span>
-        </a>
-        <a class="brand" href="./index.html">Travel Shims</a>
-        <a class="btn pull-right" href="settings.html">
-          <i class="icon-cog"></i> 
-          <span class="listtext">Settings</span>
-        </a>
-        <a class="btn pull-right" href="about.html">
-          <i class="icon-info-sign"></i> 
-          <span class="listtext">About</span>
-        </a>
-      </div>
+        <div class="navbar-inner">
+            <a class="btn pull-left" href="index.html">
+                <i class="icon-arrow-left"></i> 
+                <span class="listtext">Main</span>
+            </a>
+            <a class="brand" href="./index.html">Travel Shims</a>
+                <a class="btn pull-right" href="settings.html">
+                <i class="icon-cog"></i> 
+            <span class="listtext">Settings</span>
+            </a>
+            <a class="btn pull-right" href="about.html">
+                <i class="icon-info-sign"></i> 
+                <span class="listtext">About</span>
+            </a>
+        </div>
     </div>
-
+    
     <div class="container">
-      <div id="compassholder">
-        <div id="pointer">&darr;</div>
-        <ul id="compass">
-            <li id="N">N</li>
-            <li id="NE">NE</li>
-            <li id="E">E</li>
-            <li id="SE">SE</li>
-            <li id="S">S</li>
-            <li id="SW">SW</li>
-            <li id="W">W</li>
-            <li id="NW">NW</li>
-        </ul>
-      </div>  
+        <div id="compassholder">
+            <div id="pointer">&darr;</div>
+            <ul id="compass">
+                <li id="N">N</li>
+                <li id="NE">NE</li>
+                <li id="E">E</li>
+                <li id="SE">SE</li>
+                <li id="S">S</li>
+                <li id="SW">SW</li>
+                <li id="W">W</li>
+                <li id="NW">NW</li>
+            </ul>
+        </div>  
     </div>
-  <script src="js/bootstrap.min.js"></script>
-  </body>
+    <script src="js/bootstrap.min.js"></script>
+</body>
 </html>
