@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Travel Shims</title>
@@ -8,17 +9,13 @@
     <link href="css/main.css" rel="stylesheet">
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
     <script src="js/travelapp.js"></script>
-
     <script type="text/javascript">
-
 
     document.addEventListener("deviceready", onDeviceReady, false);
 
     function onDeviceReady() {
         compass.startWatch()
     }
-
-
 
     </script>
 
@@ -27,6 +24,10 @@
 
     <div class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-inner">
+        <a class="btn pull-left" href="index.html">
+          <i class="icon-arrow-left"></i> 
+          <span class="listtext">Main</span>
+        </a>
         <a class="brand" href="./index.html">Travel Shims</a>
         <a class="btn pull-right" href="settings.html">
           <i class="icon-cog"></i> 
@@ -39,10 +40,6 @@
       </div>
     </div>
 
-    <ul class="breadcrumb">
-      <li><a href="index.html">Main</a> <span class="divider">/</span></li>
-      <li class="active">Which way am I facing?</li>
-    </ul>
     <div class="container">
       <div id="compassholder">
         <div id="pointer">&darr;</div>
@@ -58,8 +55,6 @@
         </ul>
       </div>  
     </div>
-  </body>
- 
   <script src="js/bootstrap.min.js"></script>
   </body>
 </html>
