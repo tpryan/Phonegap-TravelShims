@@ -183,8 +183,6 @@
 			</fileset>
 
 		</ftp>
-
-		
 	</target>
 
 	<target name="notifyiOS" description="Plays an audio file">
