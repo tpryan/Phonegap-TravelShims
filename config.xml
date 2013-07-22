@@ -8,17 +8,21 @@
     <!-- versionCode is optional and Android only -->
 
     <name>Travel Shims</name>
-
-    <description>
-        An example app built of little travel tools. 
-    </description>
-
-    <author href="http://terrenceryan.com" email="terry@terrenceryan.com">
-        Terry Ryan
-    </author>
+    <description>An example app built of little travel tools.</description>
+    <author href="http://terrenceryan.com" email="terry@terrenceryan.com">Terry Ryan</author>
 
     <preference name="phonegap-version" value="2.9.0" />
     <preference name="exit-on-suspend" value="true" />
+
+    <feature name="http://api.phonegap.com/1.0/geolocation"/>
+    <feature name="http://api.phonegap.com/1.0/camera"/>
+    <feature name="http://api.phonegap.com/1.0/media"/>
+    <feature name="http://api.phonegap.com/1.0/file"/>
+
+    <plugin name="Camera" value="CDVCamera" />
+    <plugin name="Capture" value="CDVCapture" />
+
+    <access origin="https://maps.googleapis.com" />
 
     <icon src="img/android/logo/36.png" gap:platform="android" gap:density="ldpi" />
     <icon src="img/android/logo/48.png" gap:platform="android" gap:density="mdpi" />
@@ -37,12 +41,5 @@
     <gap:splash src="img/android/splash/mdpi.png" gap:platform="android" gap:density="mdpi"  width="320" height="470" />
     <gap:splash src="img/android/splash/hdpi.png" gap:platform="android" gap:density="hdpi"  width="480" height="640" />
     <gap:splash src="img/android/splash/xhdpi.png" gap:platform="android" gap:density="xhdpi" width="720" height="960" />
-
-    <feature name="http://api.phonegap.com/1.0/geolocation"/>
-    <feature name="http://api.phonegap.com/1.0/camera"/>
-    <feature name="http://api.phonegap.com/1.0/media"/>
-    <feature name="http://api.phonegap.com/1.0/file"/>
-    <plugin name="Camera" value="CDVCamera" />
-    <plugin name="Capture" value="CDVCapture" />
-    <access origin="https://maps.googleapis.com" />
+    
 </widget>
