@@ -1,3 +1,7 @@
+/*jslint undef: true, sloppy: true */
+/*global localStorage: true */
+
+
 var googleMapsURL = "https://maps.googleapis.com/maps/api/geocode/json";
 var homeLocation = {
 
@@ -7,14 +11,14 @@ var homeLocation = {
 		results.lon = localStorage.getItem('lon');
 		return results;
 	},
-	set: function(lat,lon) {
+	set: function (lat, lon) {
         localStorage.setItem('lat', lat);
         localStorage.setItem('lon', lon);
     }
 
 };
 
-function Address(street,city,state,zip) {
+function Address(street, city, state, zip) {
 	this.street = street;
 	this.city = city;
 	this.state = state;
@@ -29,17 +33,17 @@ function Address(street,city,state,zip) {
 var ajax = {
 	xmlhttp: new XMLHttpRequest(),
 	callback: "",
-	onReadyChangeState: function(){
+	onReadyChangeState: function () {
 		console.log("ajax.onReadyChangeState fired");
-		if (ajax.xmlhttp.readyState === 4 && ajax.xmlhttp.status === 200){
+		if (ajax.xmlhttp.readyState === 4 && ajax.xmlhttp.status === 200) {
 			ajax.callback(JSON.parse(ajax.xmlhttp.responseText));
 		}
 	},
-	get: function(url, successCallback){
+	get: function (url, successCallback) {
 		console.log("ajax.get fired");
 		ajax.callback = successCallback;
 		ajax.xmlhttp.onreadystatechange = ajax.onReadyChangeState;
-		ajax.xmlhttp.open("GET",url,true);
+		ajax.xmlhttp.open("GET", url, true);
 		ajax.xmlhttp.send();
 		ajax.xmlhttp.setRequestHeader();
 	}
@@ -49,12 +53,12 @@ var ajax = {
 
 var locationInterface = {
 
-	getLocation: function(){
+	getLocation: function () {
 		console.log("locationInterface.getLocation Fired");
-		navigator.geolocation.getCurrentPosition(this.getLocationSuccess,this.getError);
+		navigator.geolocation.getCurrentPosition(this.getLocationSuccess, this.getError);
 	},
 
-	getLocationSuccess: function(position){
+	getLocationSuccess: function (position) {
 		console.log("locationInterface.getLocationSuccess Fired");
 		document.querySelector("#lat").innerHTML = position.coords.latitude;
 		document.querySelector("#lon").innerHTML = position.coords.longitude;
@@ -62,33 +66,32 @@ var locationInterface = {
 		locationInterface.doReverseLookup(position);
     },
 
-    getError: function(error){
+    getError: function (error) {
 		console.log("getError Fired");
 		console.log(error);
     },
 
-    doReverseLookup: function(position) {
-      console.log("locationInterface.doReverseLookup Fired");
-      var latlon = position.coords.latitude + "," + position.coords.longitude;
-
-      ajax.get(googleMapsURL + "?sensor=false&latlng=" + latlon, locationInterface.doReverseLookupSuccess);
+    doReverseLookup: function (position) {
+        console.log("locationInterface.doReverseLookup Fired");
+        var latlon = position.coords.latitude + "," + position.coords.longitude;
+        ajax.get(googleMapsURL + "?sensor=false&latlng=" + latlon, locationInterface.doReverseLookupSuccess);
     },
 
-    doReverseLookupSuccess: function(response) {
-      console.log("locationInterface.doReverseLookupSuccess Fired");
-      var addressObj = response.results[0];
-      document.querySelector("#address").innerHTML = addressObj.formatted_address;
+    doReverseLookupSuccess: function (response) {
+        console.log("locationInterface.doReverseLookupSuccess Fired");
+        var addressObj = response.results[0];
+        document.querySelector("#address").innerHTML = addressObj.formatted_address;
     }
 };
 
 
 var distanceInterface = {
-	setDistanceReadout: function(d_km, d_miles){
+	setDistanceReadout: function (d_km, d_miles) {
 		document.querySelector("#d_km").innerHTML = d_km;
 		document.querySelector("#d_miles").innerHTML = d_miles;
 	},
 
-	setDevicePosition: function (lat,lon) {
+	setDevicePosition: function (lat, lon) {
 		document.querySelector("#lat-device").innerHTML = lat;
 		document.querySelector("#lon-device").innerHTML = lon;
 	}
@@ -96,12 +99,12 @@ var distanceInterface = {
 };
 
 var settingsInterface = {
-	reportHomeLocation: function(lat,lon) {
+	reportHomeLocation: function (lat, lon) {
 		document.querySelector("#lat").innerHTML = lat;
 		document.querySelector("#lon").innerHTML = lon;
     },
 
-    getAddress: function() {
+    getAddress: function () {
 		var formInput = new Address();
 		formInput.street =  document.querySelector("#address").value;
 		formInput.city =  document.querySelector("#city").value;
@@ -113,16 +116,16 @@ var settingsInterface = {
 };
 
 var pictureInterface = {
-	displayImage: function(imagePath){
-      var result = document.getElementById("latest");
-      result.src = imagePath;
-      result.style.display="inline";
+	displayImage: function (imagePath) {
+        var result = document.getElementById("latest");
+        result.src = imagePath;
+        result.style.display = "inline";
 	}
 };
 
 var compassInterface = {
 
-	rotateCompass: function(numberToTravelTo){
+	rotateCompass: function (numberToTravelTo) {
 		var compass =  document.querySelector('#compass');
         compass.style.webkitTransform = "rotate(" + numberToTravelTo + "deg)";
 	}
@@ -132,34 +135,34 @@ var compassInterface = {
 
 var distanceModule = {
 	
-	getLocation: function() {
-      navigator.geolocation.getCurrentPosition(distanceModule.getLocationSuccess,distanceModule.getLocationError);
-      console.log("getLocation Fired");
+	getLocation: function () {
+        navigator.geolocation.getCurrentPosition(distanceModule.getLocationSuccess, distanceModule.getLocationError);
+        console.log("getLocation Fired");
     },
 
-    getLocationError: function(error) {
-      console.log("getLocationError Fired");
-      console.log(error);
+    getLocationError: function (error) {
+        console.log("getLocationError Fired");
+        console.log(error);
     },
 
-    getLocationSuccess: function(position) {
-      var lat_device = position.coords.latitude;
-      var lon_device = position.coords.longitude;
-      var home = homeLocation.get();
-      var lat_home = home.lat;
-      var lon_home = home.lon;
-
-      distanceInterface.setDevicePosition(lat_device, lon_device);
-
-      console.log("lat_device:",lat_device);
-      console.log("lon_device:",lon_device);
-      console.log("lat_home:",lat_home);
-      console.log("lon_home:",lon_home);
-
-      var distanceKM = Math.round(distanceModule.calcDistanceBetween(lat_device, lon_device,lat_home, lon_home));
-      var distanceMiles = Math.round(distanceModule.calcDistanceBetween(lat_device, lon_device,lat_home, lon_home, "miles"));
-      
-      distanceInterface.setDistanceReadout(distanceKM, distanceMiles);
+    getLocationSuccess: function (position) {
+        var lat_device = position.coords.latitude,
+            lon_device = position.coords.longitude,
+            home = homeLocation.get(),
+            lat_home = home.lat,
+            lon_home = home.lon,
+            distanceKM = Math.round(distanceModule.calcDistanceBetween(lat_device, lon_device, lat_home, lon_home)),
+            distanceMiles = Math.round(distanceModule.calcDistanceBetween(lat_device, lon_device, lat_home, lon_home, "miles"));
+        
+        distanceInterface.setDevicePosition(lat_device, lon_device);
+        
+        console.log("lat_device:", lat_device);
+        console.log("lon_device:", lon_device);
+        console.log("lat_home:", lat_home);
+        console.log("lon_home:", lon_home);
+        
+        
+        distanceInterface.setDistanceReadout(distanceKM, distanceMiles);
     },
 
     toRad: function (Value) {
@@ -167,25 +170,32 @@ var distanceModule = {
 		return Value * Math.PI / 180;
 	},
 
-    calcDistanceBetween: function(lat1, lon1, lat2, lon2, units) {
-		if (typeof(units) === "undefined") {
+    calcDistanceBetween: function (lat1, lon1, lat2, lon2, units) {
+		if (typeof (units) === "undefined") {
 			units = "km";
 		}
 
-		var R = 6371; // Radius of earth in km 
-		if (units === "miles"){
+		var R,
+            dLat,
+            dLon,
+            a,
+            c,
+            d;
+		if (units === "miles") {
 			R = 3958.7558657440545; // Radius of earth in miles 
-		}
+		} else {
+            R = 6371; // Radius of earth in km 
+        }
 
 		//Radius of the earth in:  3958.7558657440545 miles,  6371 km  | var R = (6371 / 1.609344);
 
-		var dLat = distanceModule.toRad(lat2-lat1);
-		var dLon = distanceModule.toRad(lon2-lon1);
-		var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+		dLat = distanceModule.toRad(lat2 - lat1);
+		dLon = distanceModule.toRad(lon2 - lon1);
+		a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
 			Math.cos(distanceModule.toRad(lat1)) * Math.cos(distanceModule.toRad(lat2)) *
-			Math.sin(dLon/2) * Math.sin(dLon/2);
-		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		var d = R * c;
+			Math.sin(dLon / 2) * Math.sin(dLon / 2);
+		c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		d = R * c;
 		return d;
 	}
 
@@ -198,7 +208,7 @@ var distanceModule = {
 
 
 var settings = {
-	computeHomeLocation: function(e) {
+	computeHomeLocation: function (e) {
 		e.preventDefault();
 
 		var address = settingsInterface.getAddress();
@@ -208,30 +218,30 @@ var settings = {
 
 	setHomeLocationHere: function (e) {
 		e.preventDefault();
-		navigator.geolocation.getCurrentPosition(settings.getLocationSuccess,settings.getLocationError);
+		navigator.geolocation.getCurrentPosition(settings.getLocationSuccess, settings.getLocationError);
 	},
 
-	getLocationSuccess: function(position) {
+	getLocationSuccess: function (position) {
 		console.log("getLocationSuccess Fired");
-		var lat = position.coords.latitude;
-		var lon = position.coords.longitude;
+		var lat = position.coords.latitude,
+            lon = position.coords.longitude;
 
-		homeLocation.set(lat,lon);
-		settingsInterface.reportHomeLocation(lat,lon);
+		homeLocation.set(lat, lon);
+		settingsInterface.reportHomeLocation(lat, lon);
 	},
 
-	getLocationError: function(error) {
+	getLocationError: function (error) {
 		console.log("getLocationError Fired");
 		console.log(error);
 	},
 
 
-	doLookupSuccess: function(e) {
+	doLookupSuccess: function (e) {
 		console.log(e.results[0].geometry.location);
-		var lat = e.results[0].geometry.location.lat;
-		var lon = e.results[0].geometry.location.lng;
-		homeLocation.set(lat,lon);
-		settingsInterface.reportHomeLocation(lat,lon);
+		var lat = e.results[0].geometry.location.lat,
+            lon = e.results[0].geometry.location.lng;
+		homeLocation.set(lat, lon);
+		settingsInterface.reportHomeLocation(lat, lon);
 	}
 };
 
@@ -239,16 +249,16 @@ var settings = {
 
 var picture = {
 
-	onError: function(error) {
+	onError: function (error) {
 		console.log(error.message);
 	},
 
-	getPicture: function(e){
+	getPicture: function (e) {
 		e.preventDefault();
 		navigator.device.capture.captureImage(picture.onGetImageSuccess, picture.onError, {limit: 1});
 	},
 
-	onGetImageSuccess: function(imageInfo){
+	onGetImageSuccess: function (imageInfo) {
 		var imagePath = imageInfo[0].fullPath;
 		pictureInterface.displayImage(imagePath);
 	}
@@ -262,35 +272,35 @@ var compass = {
 	lastReading: 0,
     watchID: null,
 
-	onError: function(error) {
-      console.log(error.message);
+	onError: function (error) {
+        console.log(error.message);
     },
 
-    startWatch: function() {
+    startWatch: function () {
 		var options = { frequency: 100 };
 		compass.watchID = navigator.compass.watchHeading(compass.onSuccess, compass.onError, options);
     },
 
-    stopWatch: function() {
+    stopWatch: function () {
         if (compass.watchID) {
             navigator.compass.clearWatch(compass.watchID);
             compass.watchID = null;
         }
     },
 
-    onSuccess: function(heading) {
-        var element = document.getElementById('heading');
+    onSuccess: function (heading) {
+        //var element = document.getElementById('heading');
         compass.changeHeading(heading.magneticHeading);
     },
 
-    changeHeading: function(heading){
-        var numberToTravelTo = heading;
-        var delta = Math.abs(compass.lastReading - heading);
+    changeHeading: function (heading) {
+        var numberToTravelTo = heading,
+            delta = Math.abs(compass.lastReading - heading);
         console.log("numberToTravelTo: " + numberToTravelTo);
         console.log("delta: " + delta);
 
-        if (delta > 2){
-            if (delta > 180){
+        if (delta > 2) {
+            if (delta > 180) {
                 numberToTravelTo = numberToTravelTo - 360;
             }
         
@@ -299,7 +309,7 @@ var compass = {
         }
     },
 
-    flipSign: function(number){
+    flipSign: function (number) {
         return number * -1;
     }
 
