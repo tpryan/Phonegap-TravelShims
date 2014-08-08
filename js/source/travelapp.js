@@ -1,6 +1,16 @@
 /*jslint undef: true, sloppy: true */
 /*global localStorage: true */
 
+function onDeviceReady() {
+    console.log("devicereadyfired");
+    if (parseFloat(window.device.version) === 7.0) {
+            console.log("on ios 7");
+          document.body.style.marginTop = "20px";
+    }
+}
+  
+document.addEventListener('deviceready', onDeviceReady, false);
+
 
 var googleMapsURL = "https://maps.googleapis.com/maps/api/geocode/json";
 var homeLocation = {
